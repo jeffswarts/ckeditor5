@@ -6,10 +6,11 @@ docs/api/output.json
 external/
 lerna-debug.log
 .idea
-.vscode
 
 # Ignore `yarn.lock` - this file might contain info from external repositories.
 yarn.lock
 
 # Ignore `mrgit.json` this file contains info about external repositories.
 mrgit.json
+dist/
+package-lock.json

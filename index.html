@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>CKEditor 5 Framework – Quick start</title>
+	</head>
+	<body>
+		<div id="editor" style="margin-top: 40px; position: relative">
+			<p>Simple image:</p>
+
+			<figure class="image">
+				<img
+					src="https://via.placeholder.com/1000x300/02c7cd/fff?text=Placeholder%20image"
+					alt="CKEditor 5 rocks!"
+				/>
+			</figure>
+		</div>
+
+		<script src="dist/ckeditor.js"></script>
+		<script>
+			InlineEditor.create(document.querySelector('#editor'))
+				.then((editor) => {
+					window.editor = editor
+				})
+				.catch((error) => {
+					console.error('There was a problem initializing the editor.', error)
+				})
+		</script>
+	</body>
+</html>

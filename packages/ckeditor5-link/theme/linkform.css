@@ -49,6 +49,11 @@
 	margin-left: 0 !important;
 }
 
+.ck.ck-dropdown-pages .ck-list{
+	max-height: 200px;
+	overflow-y: auto;
+}
+
 .ck.ck-dropdown-pages .ck.ck-button {
 	border: none !important;
 }

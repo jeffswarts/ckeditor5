@@ -188,15 +188,15 @@ export default class LinkUI extends Plugin {
 
 		// Execute link command after clicking the "Save" button.
 		this.listenTo( formView, 'submit', () => {
-			let parsedUrl;
-			if ( this.addingPage ) {
+			let parsedUrl = null;
+			if ( this.addingPage && this.selectedPage != null ) {
 				if ( this.selectedPage === 'Bookings' ) {
 					parsedUrl = '#BookingCalendar';
 				} else if ( this.selectedPage === 'Events' ) {
 					parsedUrl = '#EventCalendarDesktop';
 				} else if ( this.selectedPage === 'News' ) {
 					parsedUrl = '#DisplayNews';
-				} else if ( this.selectedPage === 'Booking List' ) {
+				} else if ( this.selectedPage === 'Bookings List' ) {
 					parsedUrl = '#BookingList';
 				} else if ( this.selectedPage === 'Event List' ) {
 					parsedUrl = '#DisplayEvents';
@@ -211,14 +211,18 @@ export default class LinkUI extends Plugin {
 				} else {
 					parsedUrl = `../Page?id=${ this.selectedPage }`;
 				}
-			} else if ( this.addingDocument ) {
-				parsedUrl = `../Document/${ this.selectedDocument }`;
-			} else {
+			} else if ( this.addingDocument && this.selectedDocument != null ) {
+				parsedUrl = `../Document?id=${ this.selectedDocument }`;
+			} else if ( !this.addingPage && !this.addingDocument ) {
 				const { value } = formView.urlInputView.fieldView.element;
-				parsedUrl = addLinkProtocolIfApplicable( value, defaultProtocol );
+				if ( value != '' ) {
+					parsedUrl = addLinkProtocolIfApplicable( value, defaultProtocol );
+				}
 			}
-			editor.execute( 'link', parsedUrl, formView.getDecoratorSwitchesState() );
-			this._closeFormView();
+			if ( parsedUrl != null ) {
+				editor.execute( 'link', parsedUrl, formView.getDecoratorSwitchesState() );
+				this._closeFormView();
+			}
 		} );
 
 		// Hide the panel after clicking the "Cancel" button.
@@ -227,27 +231,15 @@ export default class LinkUI extends Plugin {
 		} );
 
 		this.listenTo( formView, 'external', () => {
-			this.formView.urlInputView.isVisible = true;
-			this.formView.pageDropDown.isVisible = false;
-			this.formView.documentDropDown.isVisible = false;
-			this.addingPage = false;
-			this.addingDocument = false;
+			this._showExternal();
 		} );
 
 		this.listenTo( formView, 'page', () => {
-			this.formView.urlInputView.isVisible = false;
-			this.formView.pageDropDown.isVisible = true;
-			this.formView.documentDropDown.isVisible = false;
-			this.addingPage = true;
-			this.addingDocument = false;
+			this._showPage();
 		} );
 
 		this.listenTo( formView, 'document', () => {
-			this.formView.urlInputView.isVisible = false;
-			this.formView.pageDropDown.isVisible = false;
-			this.formView.documentDropDown.isVisible = true;
-			this.addingPage = false;
-			this.addingDocument = true;
+			this._showDocument();
 		} );
 
 		// Close the panel on esc key press when the **form has focus**.
@@ -257,6 +249,33 @@ export default class LinkUI extends Plugin {
 		} );
 
 		return formView;
+	}
+
+	_showExternal() {
+		this.editor.editing.view.focus();
+		this.formView.urlInputView.isVisible = true;
+		this.formView.pageDropDown.isVisible = false;
+		this.formView.documentDropDown.isVisible = false;
+		this.addingPage = false;
+		this.addingDocument = false;
+	}
+
+	_showPage() {
+		this.editor.editing.view.focus();
+		this.formView.urlInputView.isVisible = false;
+		this.formView.pageDropDown.isVisible = true;
+		this.formView.documentDropDown.isVisible = false;
+		this.addingPage = true;
+		this.addingDocument = false;
+	}
+
+	_showDocument() {
+		this.editor.editing.view.focus();
+		this.formView.urlInputView.isVisible = false;
+		this.formView.pageDropDown.isVisible = false;
+		this.formView.documentDropDown.isVisible = true;
+		this.addingPage = false;
+		this.addingDocument = true;
 	}
 
 	/**
@@ -400,7 +419,35 @@ export default class LinkUI extends Plugin {
 		// clicked the same link), they would see the old value instead of the actual value of the command.
 		// https://github.com/ckeditor/ckeditor5-link/issues/78
 		// https://github.com/ckeditor/ckeditor5-link/issues/123
-		this.formView.urlInputView.fieldView.element.value = linkCommand.value || '';
+		const curValue = linkCommand.value || '';
+		if ( curValue.startsWith( '../Page?id=' ) ) {
+			const parsedValue = curValue.slice( 11 );
+			this.selectedPage = parsedValue;
+			this.selectedDocument = null;
+			this.formView.pageDropDown.buttonView.label = parsedValue;
+			this.formView.documentDropDown.buttonView.label = 'Select Document';
+			this.formView.urlInputView.fieldView.element.value = '';
+			this._showPage();
+		} else if ( curValue.startsWith( '#' ) ) {
+			const parsedValue = curValue.slice( 1 );
+			this.selectedPage = parsedValue;
+			this.selectedDocument = null;
+			this.formView.pageDropDown.buttonView.label = parsedValue;
+			this.formView.documentDropDown.buttonView.label = 'Select Document';
+			this.formView.urlInputView.fieldView.element.value = '';
+			this._showPage();
+		} else if ( curValue.startsWith( '../Document?id=' ) ) {
+			this.selectedDocument = curValue;
+			this.formView.documentDropDown.buttonView.label = curValue.slice( 15 );
+			this.formView.pageDropDown.buttonView.label = 'Select Page';
+			this.formView.urlInputView.fieldView.element.value = '';
+			this._showDocument();
+		} else {
+			this.formView.urlInputView.fieldView.element.value = curValue;
+			this.formView.documentDropDown.buttonView.label = 'Select Document';
+			this.formView.pageDropDown.buttonView.label = 'Select Page';
+			this._showExternal();
+		}
 	}
 
 	/**

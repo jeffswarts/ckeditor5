@@ -1,5 +1,5 @@
 /**
- * @license Copyright (c) 2003-2022, CKSource Holding sp. z o.o. All rights reserved.
+ * @license Copyright (c) 2003-2021, CKSource - Frederico Knabben. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 
@@ -7,10 +7,10 @@
  * @module ui/labeledfield/labeledfieldview
  */
 
-import View from '../view';
+import View from '@ckeditor/ckeditor5-ui/src/view';
 import uid from '@ckeditor/ckeditor5-utils/src/uid';
-import LabelView from '../label/labelview';
-import '../../theme/components/labeledfield/labeledfieldview.css';
+import LabelView from '@ckeditor/ckeditor5-ui/src/label/labelview';
+import '../../../theme/labeledfield/labeledfieldview.css';
 
 /**
  * The labeled field view class. It can be used to enhance any view with the following features:

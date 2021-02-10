@@ -7,10 +7,10 @@
  * @module ui/labeledfield/labeledfieldview
  */
 
-import View from '../view';
+import View from '@ckeditor/ckeditor5-ui/src/view';
 import uid from '@ckeditor/ckeditor5-utils/src/uid';
-import LabelView from '../label/labelview';
-import '../../theme/components/labeledfield/labeledfieldview.css';
+import LabelView from '@ckeditor/ckeditor5-ui/src/label/labelview';
+import '../../../theme/labeledfield/labeledfieldview.css';
 
 /**
  * The labeled field view class. It can be used to enhance any view with the following features:

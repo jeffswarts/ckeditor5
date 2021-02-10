@@ -16,6 +16,7 @@ import LinkActionsView from './ui/linkactionsview';
 import { addLinkProtocolIfApplicable, isLinkElement, LINK_KEYSTROKE } from './utils';
 
 import linkIcon from '../theme/icons/link.svg';
+import SetPagesCommand from './setpagescommand.js';
 
 const VISUAL_SELECTION_MARKER_NAME = 'link-ui';
 
@@ -94,6 +95,13 @@ export default class LinkUI extends Plugin {
 				classes: [ 'ck-fake-link-selection', 'ck-fake-link-selection_collapsed' ]
 			}
 		} );
+
+		this.selectedPage = null;
+		this.selectedDocument = null;
+		this.addingPage = false;
+		this.addingDocument = false;
+		editor.commands.add( 'setpages', new SetPagesCommand( editor, this.formView.pageDropDown ) );
+		editor.commands.add( 'setdocuments', new SetPagesCommand( editor, this.formView.documentDropDown ) );
 	}
 
 	/**
@@ -167,10 +175,48 @@ export default class LinkUI extends Plugin {
 		formView.urlInputView.bind( 'isReadOnly' ).to( linkCommand, 'isEnabled', value => !value );
 		formView.saveButtonView.bind( 'isEnabled' ).to( linkCommand );
 
+		// Execute command when an item from the dropdown is selected.
+		this.listenTo( formView.pageDropDown, 'execute', evt => {
+			this.selectedPage = evt.source.commandValue;
+			this.formView.pageDropDown.buttonView.label = evt.source.commandValue;
+		} );
+
+		this.listenTo( formView.documentDropDown, 'execute', evt => {
+			this.selectedDocument = evt.source.commandValue;
+			this.formView.documentDropDown.buttonView.label = evt.source.commandValue;
+		} );
+
 		// Execute link command after clicking the "Save" button.
 		this.listenTo( formView, 'submit', () => {
-			const { value } = formView.urlInputView.fieldView.element;
-			const parsedUrl = addLinkProtocolIfApplicable( value, defaultProtocol );
+			let parsedUrl;
+			if ( this.addingPage ) {
+				if ( this.selectedPage === 'Bookings' ) {
+					parsedUrl = '#BookingCalendar';
+				} else if ( this.selectedPage === 'Events' ) {
+					parsedUrl = '#EventCalendarDesktop';
+				} else if ( this.selectedPage === 'News' ) {
+					parsedUrl = '#DisplayNews';
+				} else if ( this.selectedPage === 'Booking List' ) {
+					parsedUrl = '#BookingList';
+				} else if ( this.selectedPage === 'Event List' ) {
+					parsedUrl = '#DisplayEvents';
+				} else if ( this.selectedPage === 'Member List' ) {
+					parsedUrl = '#FavouriteList';
+				} else if ( this.selectedPage === 'Other Lists' ) {
+					parsedUrl = '#CustomListMember.DisplayCustomLists';
+				} else if ( this.selectedPage === 'Documents' ) {
+					parsedUrl = '#DisplayDocuments';
+				} else if ( this.selectedPage === 'Contact' ) {
+					parsedUrl = '#ClubContact';
+				} else {
+					parsedUrl = `../Page?id=${ this.selectedPage }`;
+				}
+			} else if ( this.addingDocument ) {
+				parsedUrl = `../Document/${ this.selectedDocument }`;
+			} else {
+				const { value } = formView.urlInputView.fieldView.element;
+				parsedUrl = addLinkProtocolIfApplicable( value, defaultProtocol );
+			}
 			editor.execute( 'link', parsedUrl, formView.getDecoratorSwitchesState() );
 			this._closeFormView();
 		} );
@@ -178,6 +224,30 @@ export default class LinkUI extends Plugin {
 		// Hide the panel after clicking the "Cancel" button.
 		this.listenTo( formView, 'cancel', () => {
 			this._closeFormView();
+		} );
+
+		this.listenTo( formView, 'external', () => {
+			this.formView.urlInputView.isVisible = true;
+			this.formView.pageDropDown.isVisible = false;
+			this.formView.documentDropDown.isVisible = false;
+			this.addingPage = false;
+			this.addingDocument = false;
+		} );
+
+		this.listenTo( formView, 'page', () => {
+			this.formView.urlInputView.isVisible = false;
+			this.formView.pageDropDown.isVisible = true;
+			this.formView.documentDropDown.isVisible = false;
+			this.addingPage = true;
+			this.addingDocument = false;
+		} );
+
+		this.listenTo( formView, 'document', () => {
+			this.formView.urlInputView.isVisible = false;
+			this.formView.pageDropDown.isVisible = false;
+			this.formView.documentDropDown.isVisible = true;
+			this.addingPage = false;
+			this.addingDocument = true;
 		} );
 
 		// Close the panel on esc key press when the **form has focus**.

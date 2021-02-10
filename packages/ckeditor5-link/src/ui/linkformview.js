@@ -26,6 +26,16 @@ import { icons } from 'ckeditor5/src/core';
 import '@ckeditor/ckeditor5-ui/theme/components/responsive-form/responsiveform.css';
 import '../../theme/linkform.css';
 
+import LabeledFieldView from '../ui/labeledfield/labeledfieldview.js';
+import { createLabeledInputText } from '@ckeditor/ckeditor5-ui/src/labeledfield/utils';
+import injectCssTransitionDisabler from '@ckeditor/ckeditor5-ui/src/bindings/injectcsstransitiondisabler';
+
+import externalIcon from '../../theme/icons/external.svg';
+import pageIcon from '../../theme/icons/page.svg';
+import documentIcon from '../../theme/icons/document.svg';
+
+import { createDropdown } from '@ckeditor/ckeditor5-ui/src/dropdown/utils';
+
 /**
  * The link form view controller class.
  *
@@ -86,6 +96,12 @@ export default class LinkFormView extends View {
 		 */
 		this.cancelButtonView = this._createButton( t( 'Cancel' ), icons.cancel, 'ck-button-cancel', 'cancel' );
 
+		this.externalButtonView = this._createButton( t( 'External' ), externalIcon, 'ck-button-link-type', 'external' );
+
+		this.pageButtonView = this._createButton( t( 'Page' ), pageIcon, 'ck-button-link-type', 'page' );
+
+		this.documentButtonView = this._createButton( t( 'Document' ), documentIcon, 'ck-button-link-type', 'document' );
+
 		/**
 		 * A collection of {@link module:ui/button/switchbuttonview~SwitchButtonView},
 		 * which corresponds to {@link module:link/linkcommand~LinkCommand#manualDecorators manual decorators}
@@ -96,6 +112,20 @@ export default class LinkFormView extends View {
 		 * @type {module:ui/viewcollection~ViewCollection}
 		 */
 		this._manualDecoratorSwitches = this._createManualDecoratorSwitches( linkCommand );
+
+		/**
+		 *
+		 * @readonly
+		 * @type {module:ui/dropdown/dropdownview~DropdownView}
+		 */
+		this.pageDropDown = createDropdown();
+
+		/**
+		 *
+		 * @readonly
+		 * @type {module:ui/dropdown/dropdownview~DropdownView}
+		 */
+		this.documentDropDown = createDropdown();
 
 		/**
 		 * A collection of child views in the form.
@@ -182,7 +212,12 @@ export default class LinkFormView extends View {
 		} );
 
 		const childViews = [
+			this.externalButtonView,
+			this.pageButtonView,
+			this.documentButtonView,
 			this.urlInputView,
+			this.pageDropDown,
+			this.documentDropDown,
 			...this._manualDecoratorSwitches,
 			this.saveButtonView,
 			this.cancelButtonView
@@ -303,7 +338,41 @@ export default class LinkFormView extends View {
 	_createFormChildren( manualDecorators ) {
 		const children = this.createCollection();
 
+		children.add( this.externalButtonView );
+		children.add( this.pageButtonView );
+		children.add( this.documentButtonView );
+
 		children.add( this.urlInputView );
+
+		this.pageDropDown.isVisible = false;
+		this.pageDropDown.buttonView.set( {
+			isOn: false,
+			withText: true,
+			label: 'Select Page'
+		} );
+		this.pageDropDown.extendTemplate( {
+			attributes: {
+				class: [
+					'ck-dropdown-pages'
+				]
+			}
+		} );
+		children.add( this.pageDropDown );
+
+		this.documentDropDown.isVisible = false;
+		this.documentDropDown.buttonView.set( {
+			isOn: false,
+			withText: true,
+			label: 'Select Document'
+		} );
+		this.documentDropDown.extendTemplate( {
+			attributes: {
+				class: [
+					'ck-dropdown-pages'
+				]
+			}
+		} );
+		children.add( this.documentDropDown );
 
 		if ( manualDecorators.length ) {
 			const additionalButtonsView = new View();

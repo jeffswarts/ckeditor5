@@ -3,7 +3,6 @@ import AutoImage from '@ckeditor/ckeditor5-image/src/autoimage.js';
 import AutoLink from './packages/ckeditor5-link/src/autolink.js';
 import BlockQuote from '@ckeditor/ckeditor5-block-quote/src/blockquote.js';
 import Bold from '@ckeditor/ckeditor5-basic-styles/src/bold.js';
-import CustomLink from './packages/ckeditor5-custom-link/src/customlink.js';
 import Essentials from '@ckeditor/ckeditor5-essentials/src/essentials.js';
 import FontBackgroundColor from '@ckeditor/ckeditor5-font/src/fontbackgroundcolor.js';
 import FontColor from '@ckeditor/ckeditor5-font/src/fontcolor.js';
@@ -47,7 +46,6 @@ InlineEditor.builtinPlugins = [
 	AutoLink,
 	BlockQuote,
 	Bold,
-	CustomLink,
 	Essentials,
 	FontBackgroundColor,
 	FontColor,
@@ -149,7 +147,7 @@ InlineEditor.defaultConfig = {
 			'|',
 			'imageResize',
 			'|',
-			'customLink',
+			'link',
 			'|',
 			'imageTextAlternative'
 		]

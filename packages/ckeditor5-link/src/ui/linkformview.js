@@ -118,14 +118,14 @@ export default class LinkFormView extends View {
 		 * @readonly
 		 * @type {module:ui/dropdown/dropdownview~DropdownView}
 		 */
-		this.pageDropDown = createDropdown();
+		this.pageDropDown = createDropdown( locale );
 
 		/**
 		 *
 		 * @readonly
 		 * @type {module:ui/dropdown/dropdownview~DropdownView}
 		 */
-		this.documentDropDown = createDropdown();
+		this.documentDropDown = createDropdown( locale );
 
 		/**
 		 * A collection of child views in the form.

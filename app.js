@@ -1,8 +1,10 @@
 import Alignment from '@ckeditor/ckeditor5-alignment/src/alignment.js';
 import AutoImage from '@ckeditor/ckeditor5-image/src/autoimage.js';
 import AutoLink from './packages/ckeditor5-link/src/autolink.js';
+import AutoSave from '@ckeditor/ckeditor5-autosave/src/autosave.js';
 import BlockQuote from '@ckeditor/ckeditor5-block-quote/src/blockquote.js';
 import Bold from '@ckeditor/ckeditor5-basic-styles/src/bold.js';
+import ClassicEditorBase from '@ckeditor/ckeditor5-editor-classic/src/classiceditor';
 import Essentials from '@ckeditor/ckeditor5-essentials/src/essentials.js';
 import FontBackgroundColor from '@ckeditor/ckeditor5-font/src/fontbackgroundcolor.js';
 import FontColor from '@ckeditor/ckeditor5-font/src/fontcolor.js';
@@ -26,7 +28,6 @@ import LinkImage from './packages/ckeditor5-link/src/linkimage.js';
 import List from '@ckeditor/ckeditor5-list/src/list.js';
 import ListStyle from '@ckeditor/ckeditor5-list/src/liststyle.js';
 import MediaEmbed from '@ckeditor/ckeditor5-media-embed/src/mediaembed.js';
-import MediaEmbedToolbar from '@ckeditor/ckeditor5-media-embed/src/mediaembedtoolbar.js';
 import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph.js';
 import RemoveFormat from '@ckeditor/ckeditor5-remove-format/src/removeformat.js';
 import Strikethrough from '@ckeditor/ckeditor5-basic-styles/src/strikethrough.js';
@@ -37,13 +38,15 @@ import TableToolbar from '@ckeditor/ckeditor5-table/src/tabletoolbar.js';
 import TextTransformation from '@ckeditor/ckeditor5-typing/src/texttransformation.js';
 import Underline from '@ckeditor/ckeditor5-basic-styles/src/underline.js';
 
-export default class InlineEditor extends InlineEditorBase {}
+class InlineEditor extends InlineEditorBase {}
+class ClassicEditor extends ClassicEditorBase {}
 
 // Plugins to include in the build.
-InlineEditor.builtinPlugins = [
+const plugins = [
 	Alignment,
 	AutoImage,
 	AutoLink,
+	AutoSave,
 	BlockQuote,
 	Bold,
 	Essentials,
@@ -68,7 +71,6 @@ InlineEditor.builtinPlugins = [
 	List,
 	ListStyle,
 	MediaEmbed,
-	MediaEmbedToolbar,
 	Paragraph,
 	RemoveFormat,
 	Strikethrough,
@@ -81,7 +83,7 @@ InlineEditor.builtinPlugins = [
 ];
 
 // Editor configuration.
-InlineEditor.defaultConfig = {
+const config = {
 	toolbar: {
 		items: [
 			'heading',
@@ -174,4 +176,13 @@ InlineEditor.defaultConfig = {
 			'tableProperties'
 		]
 	}
+};
+
+ClassicEditor.builtinPlugins = plugins;
+InlineEditor.builtinPlugins = plugins;
+ClassicEditor.defaultConfig = config;
+InlineEditor.defaultConfig = config;
+
+export default {
+	ClassicEditor, InlineEditor
 };

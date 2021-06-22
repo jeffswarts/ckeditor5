@@ -121,6 +121,8 @@ export default class DropdownView extends View {
 		 */
 		this.set( 'isEnabled', true );
 
+		this.set( 'isVisible', true );
+
 		/**
 		 * (Optional) The additional CSS class set on the dropdown {@link #element}.
 		 *
@@ -174,7 +176,8 @@ export default class DropdownView extends View {
 					'ck',
 					'ck-dropdown',
 					bind.to( 'class' ),
-					bind.if( 'isEnabled', 'ck-disabled', value => !value )
+					bind.if( 'isEnabled', 'ck-disabled', value => !value ),
+					bind.if( 'isVisible', 'ck-hidden', value => !value )
 				],
 				id: bind.to( 'id' ),
 				'aria-describedby': bind.to( 'ariaDescribedById' )

@@ -16,7 +16,8 @@ import {
 	ViewCollection,
 	createLabeledInputText,
 	injectCssTransitionDisabler,
-	submitHandler
+	submitHandler,
+	createDropdown
 } from 'ckeditor5/src/ui';
 import { FocusTracker, KeystrokeHandler } from 'ckeditor5/src/utils';
 import { icons } from 'ckeditor5/src/core';
@@ -26,15 +27,9 @@ import { icons } from 'ckeditor5/src/core';
 import '@ckeditor/ckeditor5-ui/theme/components/responsive-form/responsiveform.css';
 import '../../theme/linkform.css';
 
-import LabeledFieldView from '../ui/labeledfield/labeledfieldview.js';
-import { createLabeledInputText } from '@ckeditor/ckeditor5-ui/src/labeledfield/utils';
-import injectCssTransitionDisabler from '@ckeditor/ckeditor5-ui/src/bindings/injectcsstransitiondisabler';
-
 import externalIcon from '../../theme/icons/external.svg';
 import pageIcon from '../../theme/icons/page.svg';
 import documentIcon from '../../theme/icons/document.svg';
-
-import { createDropdown } from '@ckeditor/ckeditor5-ui/src/dropdown/utils';
 
 /**
  * The link form view controller class.

@@ -410,6 +410,12 @@ export default class LinkFormView extends View {
 
 		return children;
 	}
+
+	setIsNews(isNews) {
+		this.externalButtonView.isVisible = !isNews;
+		this.pageButtonView.isVisible = !isNews;
+		this.documentButtonView.isVisible = !isNews;
+	}
 }
 
 /**

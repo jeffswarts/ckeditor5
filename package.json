@@ -103,7 +103,6 @@
     "glob": "^7.1.6",
     "http-server": "^0.12.3",
     "husky": "^4.2.5",
-    "lint-staged": "^10.2.6",
     "mini-css-extract-plugin": "^0.9.0",
     "minimatch": "^3.0.4",
     "minimist": "^1.2.5",
@@ -170,17 +169,6 @@
     "check-dependencies": "ckeditor5-dev-tests-check-dependencies",
     "build": "webpack --mode production"
   },
-  "lint-staged": {
-    "**/*.js": [
-      "eslint --quiet"
-    ],
-    "**/*.css": [
-      "stylelint --quiet --allow-empty-input"
-    ],
-    "**/(*.{js,css}|package.json)": [
-      "ckeditor5-dev-tests-check-dependencies --quiet"
-    ]
-  },
   "eslintIgnore": [
     "build/**",
     "packages/*/node_modules/**",
@@ -203,10 +191,5 @@
     "nohoist": [
       "**/husky"
     ]
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
   }
 }

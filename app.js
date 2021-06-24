@@ -178,6 +178,7 @@ const config = {
 	},
 	fontSize: {
 		options: [
+			'default',
 			10,
 			12,
 			14,

@@ -17,7 +17,6 @@ import { addLinkProtocolIfApplicable, isLinkElement, LINK_KEYSTROKE } from './ut
 
 import linkIcon from '../theme/icons/link.svg';
 import SetPagesCommand from './setpagescommand.js';
-import SetIsNewsCommand from './setisnewscommand.js';
 
 const VISUAL_SELECTION_MARKER_NAME = 'link-ui';
 
@@ -103,7 +102,6 @@ export default class LinkUI extends Plugin {
 		this.addingDocument = false;
 		editor.commands.add( 'setpages', new SetPagesCommand( editor, this.formView.pageDropDown ) );
 		editor.commands.add( 'setdocuments', new SetPagesCommand( editor, this.formView.documentDropDown ) );
-		editor.commands.add( 'setisnews', new SetIsNewsCommand( editor, this.formView ) );
 	}
 
 	/**
@@ -211,10 +209,10 @@ export default class LinkUI extends Plugin {
 				} else if ( this.selectedPage === 'Contact' ) {
 					parsedUrl = '#ClubContact';
 				} else {
-					parsedUrl = `../Page?id=${ this.selectedPage }`;
+					parsedUrl = `/Website/Page?id=${ this.selectedPage }`;
 				}
 			} else if ( this.addingDocument && this.selectedDocument != null ) {
-				parsedUrl = `../Document?id=${ this.selectedDocument }`;
+				parsedUrl = `/Website/Document?id=${ this.selectedDocument }`;
 			} else if ( !this.addingPage && !this.addingDocument ) {
 				const { value } = formView.urlInputView.fieldView.element;
 				if ( value != '' ) {

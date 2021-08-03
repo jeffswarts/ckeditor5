@@ -23,7 +23,6 @@
 					window.editor = editor
 					editor.execute('setpages', [ 'Home', 'About' ])
 					editor.execute('setdocuments', [ 'file.dpf', 'file2.pdf' ])
-					editor.execute('setisnews', false)
 				})
 				.catch((error) => {
 					console.error('There was a problem initializing the editor.', error)

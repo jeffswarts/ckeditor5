@@ -161,6 +161,11 @@ const config = {
 					target: '_blank',
 					rel: 'noopener noreferrer'
 				}
+			},
+			displayAsButton: {
+				mode: 'manual',
+				label: 'Display as button',
+				classes: ['btn', 'btn-primary']
 			}
 		}
 	},

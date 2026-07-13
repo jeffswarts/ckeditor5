@@ -208,6 +208,10 @@ export default class LinkUI extends Plugin {
 					parsedUrl = '#DisplayDocuments';
 				} else if ( this.selectedPage === 'Contact' ) {
 					parsedUrl = '#ClubContact';
+				} else if ( this.selectedPage === 'Display Membership' ) {
+					parsedUrl = '#MemberMembership.DisplayMemberships';
+				} else if ( this.selectedPage === 'Buy Membership' ) {
+					parsedUrl = '#MemberMembership.MembershipOnlineSale';
 				} else {
 					parsedUrl = `/Website/Page?id=${ this.selectedPage }`;
 				}
